@@ -8,15 +8,37 @@ use App\Models\Diary;
 
 class DiaryController extends Controller
 {
-   
+    /**
+     * @OA\Get(
+     *     tags={"diary"},
+     *     summary="Returns a list of diaries",
+     *     description="Returns a object of diaries",
+     *     path="/V1/course",
+     *     @OA\Response(response="200", description="A list with diaries"),
+     * ),
+     * 
+    */
     public function index()
     {
         return Diary::all(); 
     }
  
+    /**
+     * @OA\Post(
+     *     path="/index" ,
+     *     tags={"diary"},
+     *     summary="Save object of diaries",
+     *     description="Sava Returns a object of diaries",
+     *     path="/V1/course",
+     *     @OA\Response(response="200", description="A list with diaries"),
+     * ),
+     * 
+    */
     public function store(StoreDiaryRequest $request)
     {
-        $request->validated(); 
+        $request->validated();
+        $user =  auth()->user();  
+        $request->merge(['user_id'=>$user->id]);
         $diary = Diary::query()->firstOrCreate($request->all());
         return response($diary,201);  
     }

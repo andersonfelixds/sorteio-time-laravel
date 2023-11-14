@@ -1,0 +1,21 @@
+openapi: 3.0.0
+paths:
+  /V1/course:
+    get:
+      tags:
+        - diary
+      summary: 'Returns a list of diaries'
+      description: 'Returns a object of diaries'
+      operationId: 0c8806f18fea0b9a3c036fab19842446
+      responses:
+        '200':
+          description: 'A list with diaries'
+    post:
+      tags:
+        - diary
+      summary: 'Save object of diaries'
+      description: 'Sava Returns a object of diaries'
+      operationId: b72383b952421f6d74f8201782d1ccdd
+      responses:
+        '200':
+          description: 'A list with diaries'

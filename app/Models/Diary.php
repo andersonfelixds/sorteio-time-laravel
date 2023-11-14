@@ -16,7 +16,8 @@ class Diary extends Model
         'deadline_at',
         'conclusion_at',
         'type_diary_id',
-        'status'
+        'status', 
+        'user_id',
     ];
 
     
