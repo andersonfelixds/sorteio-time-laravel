@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('diaries', function (Blueprint $table) {
-            $table->integer('user_id')->default(0)->nullable();
+        Schema::create('players', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('level');
+            $table->boolean('goalkeeper'); 
+            $table->boolean('present');
+            $table->timestamps();
         });
     }
 
@@ -21,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('players');
     }
 };

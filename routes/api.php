@@ -2,9 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DiaryController;
-use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\TimeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,20 +14,19 @@ use App\Http\Controllers\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('sanctum/token', [UserController::class,'authenticate']);
-Route::apiResource('user', UserController::class);
+Route::options('/{any}', function () {
+    return response()->json([], 204);
+})->where('any', '.*');
 
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::apiResource('players', PlayerController::class);
+// Rota para adicionar um novo jogador
+Route::post('/players', [PlayerController::class, 'store'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
+// Rota para atualizar um jogador existente
+Route::put('/players/{id}', [PlayerController::class, 'update'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
- Route::middleware('auth:sanctum')->group(function(){
-     Route::apiResource("diary", DiaryController::class);   
-     
-     Route::get("/user/me", [UserController::class,'me']);
-     Route::patch('/user/change-email',  [UserController::class,'updateEmail']);
-     Route::delete('/user/logout',  [UserController::class,'logout']);
-     
- });
+// Rota para confirmar a presença de um jogador
+Route::patch('/players/{id}/confirmar-presenca', [PlayerController::class, 'confirmarPresenca'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
+Route::post('sortear-times', [TimeController::class, 'sortearTimes'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
