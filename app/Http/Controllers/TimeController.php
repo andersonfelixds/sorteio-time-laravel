@@ -11,10 +11,10 @@ class TimeController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $response = $next($request);
-            $response->header('Access-Control-Allow-Origin', 'http://localhost:3000');
-            $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-            $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            $response->header('Access-Control-Allow-Credentials', 'true');
+             $response->header('Access-Control-Allow-Origin', '*');
+             $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+             $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+             $response->header('Access-Control-Allow-Credentials', 'false');
             return $response;
         });
     }
@@ -49,7 +49,7 @@ class TimeController extends Controller
             $times[$timeCount]['jogadores'] = $times[$timeCount]['jogadores']->merge($jogadoresDeLinha);
         }
         $response = response()->json(['times' => $times]);
-        $response->header('Access-Control-Allow-Origin', 'http://localhost:8989');
+        //$response->header('Access-Control-Allow-Origin', 'http://localhost:8989');
         return $response;
     }
 }

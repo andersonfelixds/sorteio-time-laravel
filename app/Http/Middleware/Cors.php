@@ -13,23 +13,17 @@ class Cors
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, \Closure $next)
     {
-        header("Access-Control-Allow-Origin: *");
-        //ALLOW OPTIONS METHOD
-        $headers = [
-            'Access-Control-Allow-Methods' => 'POST,GET,OPTIONS,PUT,DELETE',
-            'Access-Control-Allow-Headers' => 'Content-Type, X-Auth-Token, Origin, Authorization',
-        ];
-        if ($request->getMethod() == "OPTIONS") {
-            //The client-side application can set only headers allowed in Access-Control-Allow-Headers
-                return response()->json('OK',200,$headers);
-            }
+        if ($request->isMethod('OPTIONS')) {
+            $response = response('', 200);
+        } else {
             $response = $next($request);
-            foreach ($headers as $key => $value) {
-                $response->header($key, $value);
-            }
-            return $response;
-        
+        }
+        $response->header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, PATCH, DELETE');
+        $response->header('Access-Control-Allow-Headers', "Accept, Authorization, Content-Type");
+        $response->header('Access-Control-Allow-Origin', '*');
+        return $response;
     }
+        
 }
