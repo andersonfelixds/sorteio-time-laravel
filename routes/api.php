@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,15 +20,18 @@ Route::options('/{any}', function () {
     return response()->json([], 204);
 })->where('any', '.*');
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware(['cors'])->group(function () {
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+        
+    });
+    
+    Route::middleware('auth:sanctum')->post('/players', [PlayerController::class, 'store']);
+    Route::middleware('auth:sanctum')->get('/players', [PlayerController::class, 'list']);
+    Route::middleware('auth:sanctum')->post('/sortear-times', [TimeController::class, 'sortearTimes']);
+    Route::middleware('auth:sanctum')->post('/players/confirmar-presenca', [PlayerController::class, 'confirmarPresenca']); 
+    Route::middleware('auth:sanctum')->post('/register', [RegisterController::class, 'register']);
+    
 
-Route::apiResource('players', PlayerController::class);
-// Rota para adicionar um novo jogador
-Route::post('/players', [PlayerController::class, 'store'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-// Rota para atualizar um jogador existente
-Route::put('/players/{id}', [PlayerController::class, 'update'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-// Rota para confirmar a presença de um jogador
-Route::patch('/players/{id}/confirmar-presenca', [PlayerController::class, 'confirmarPresenca'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-Route::post('sortear-times', [TimeController::class, 'sortearTimes'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+});
