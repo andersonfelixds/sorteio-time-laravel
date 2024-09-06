@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /.docker
 /frontend/node_modules
+/frontend/*

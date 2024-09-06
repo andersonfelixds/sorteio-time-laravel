@@ -9,14 +9,14 @@ class TimeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $response = $next($request);
-             $response->header('Access-Control-Allow-Origin', '*');
-             $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-             $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-             $response->header('Access-Control-Allow-Credentials', 'false');
-            return $response;
-        });
+        // $this->middleware(function ($request, $next) {
+        //     $response = $next($request);
+        //      $response->header('Access-Control-Allow-Origin', '*');
+        //      $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        //      $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        //      $response->header('Access-Control-Allow-Credentials', 'false');
+        //     return $response;
+        // });
     }
     // Função para sortear os times
     public function sortearTimes(Request $request)
@@ -36,7 +36,6 @@ class TimeController extends Controller
         $times = [];
         $timeCount = ceil($jogadores->count() / $numeroDeJogadoresPorTime);
 
-        // Sortear times
         foreach (range(1, $timeCount) as $timeIndex) {
             $times[$timeIndex] = [
                 'goleiro' => $goleiros->shift(),
@@ -44,12 +43,10 @@ class TimeController extends Controller
             ];
         }
 
-        // Se houver jogadores restantes, adicione ao último time
-        if ($jogadoresDeLinha->isNotEmpty()) {
+         if ($jogadoresDeLinha->isNotEmpty()) {
             $times[$timeCount]['jogadores'] = $times[$timeCount]['jogadores']->merge($jogadoresDeLinha);
         }
         $response = response()->json(['times' => $times]);
-        //$response->header('Access-Control-Allow-Origin', 'http://localhost:8989');
         return $response;
     }
 }

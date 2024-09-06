@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class Cors
 {
@@ -15,15 +13,12 @@ class Cors
      */
     public function handle($request, \Closure $next)
     {
-        if ($request->isMethod('OPTIONS')) {
-            $response = response('', 200);
-        } else {
-            $response = $next($request);
-        }
-        $response->header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, PATCH, DELETE');
-        $response->header('Access-Control-Allow-Headers', "Accept, Authorization, Content-Type");
-        $response->header('Access-Control-Allow-Origin', '*');
-        return $response;
+        
+
+        return $next($request)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        //      ;
     }
         
 }
